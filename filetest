@@ -1,1 +1,17 @@
+pipeline {
+    agent any
 
+    stages {
+	stage('Create-container-myapp') {
+	    steps {
+		sh 'docker run -d --name myapp --hostname myapp mon-nginx \ -v volumemyapp:/var/www/html'
+		sh 'docker ps && docker exec myapp ifconfig'
+	    }	
+	}
+	stage('Copy-monsite') {
+	    steps {
+		sh 'cp -rf ./monsite/ ./volumemyapp'
+	    }
+	}
+    }
+}

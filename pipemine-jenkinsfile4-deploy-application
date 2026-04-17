@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('CheckoutSCM') {
+            steps {
+                cleanWs()
+		}
+	}
+        stage('Clone GitHub') {
+            steps {
+                git branch: 'main', url: 'https://github.com/benjamincrouzet/githubeval.git'
+            }
+        }
+	stage('Install Docker') {
+            steps {
+                sh 'sudo apt autoremove docker* -y'
+		sh 'sudo apt purge docker* -y'
+                sh 'sudo apt update'
+                sh 'sudo apt install apt-transport-https ca-certificates curl software-properties-common -y'
+                sh 'sudo apt install docker.io -y'
+                sh 'sudo chmod 666 /var/run/docker.sock'
+                sh 'sudo usermod -aG docker $USER'
+                sh 'sudo systemctl start docker.service'
+                sh 'sudo systemctl status docker.service'
+            }
+        }
+	stage('Clone') {
+            steps {
+                git branch: 'main', url: 'https://github.com/benjamincrouzet/githubeval.git'
+            }
+        }
+        stage('Build-image-nginx') {
+            steps {
+                sh 'docker build -t mon-nginx .'
+            }
+        }
+	stage('Create-container-myapp') {
+	    steps {
+		sh 'docker run -d --name myapp --hostname myapp mon-nginx \ -v volumemyapp:/var/www/html'
+		sh 'docker ps && docker exec myapp ifconfig'
+	    }	
+	}
+	stage('Copy-monsite') {
+	    steps {
+		sh 'cp -rf ./monsite/ ./volumemyapp'
+	    }
+	}
+    }
+}
