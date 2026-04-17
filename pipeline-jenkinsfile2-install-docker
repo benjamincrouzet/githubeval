@@ -6,7 +6,7 @@ pipeline {
         stage('Install Docker') {
             steps {
                 sh 'sudo apt autoremove docker.io docker-compose -y || true'
-                sh 'sudo apt update'
+                sh 'sudo apt update && upgrade -y'
                 sh 'sudo apt install apt-transport-https ca-certificates curl software-properties-common -y'
                 sh 'sudo apt install docker.io -y'
                 sh 'sudo chmod 666 /var/run/docker.sock'
