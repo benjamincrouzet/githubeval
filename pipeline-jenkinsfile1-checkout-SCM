@@ -2,21 +2,14 @@ pipeline {
     agent any
 
     stages {
-        stage('Voir workspace') {
+        stage('CheckoutSCM') {
             steps {
-                sh 'pwd'
-            }
-        }
-
-        stage('Nettoyage') {
-            steps {
-                deleteDir()
-            }
-        }
-
+                cleanWs()
+		}
+	}
         stage('Clone GitHub') {
             steps {
-                git 'https://github.com/benjamincrouzet/githubeval.git'
+                git branch: 'main', url: 'https://github.com/benjamincrouzet/githubeval.git'
             }
         }
     }
