@@ -1,8 +1,6 @@
 pipeline {
     agent any
-
     stages {
-
         stage('Install Docker') {
             steps {
                 sh 'sudo apt autoremove docker* -y'
@@ -15,6 +13,5 @@ pipeline {
                 sh 'sudo systemctl status docker.service'
             }
         }
-
     }
 }
