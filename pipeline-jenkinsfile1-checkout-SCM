@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Voir workspace') {
+            steps {
+                sh 'pwd'
+            }
+        }
+
+        stage('Nettoyage') {
+            steps {
+                deleteDir()
+            }
+        }
+
+        stage('Clone GitHub') {
+            steps {
+                git 'https://github.com/benjamincrouzet/githubeval.git'
+            }
+        }
+    }
+}
