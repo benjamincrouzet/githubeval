@@ -35,7 +35,7 @@ pipeline {
         }
 	stage('Create-container-myapp') {
 	    steps {
-		sh 'docker run -d --name myapp --hostname myapp mon-nginx \ -v volumemyapp:/var/www/html'
+		sh 'docker run -d --name myapp --hostname myapp -v volumemyapp:/var/www/html mon-nginx'
 		sh 'docker ps && docker exec myapp ifconfig'
 	    }	
 	}
